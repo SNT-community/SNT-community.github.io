@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SNT Community</title>
+        <script src="js/temp.js"></script>
+        <script src="//cdn1.838483.xyz/jquery/jquery-3.7.1.min.js"></script>
+        <script src="//cdn1.838483.xyz/saV5/packPOST.js"></script>
+        <script>
+        var token,uid,from;
+        function getLoginInfo(){
+            if(location.href.indexOf('?')==-1){
+                return []
+            }else{
+            return location.href.split('?')[1].split('&')
+            }
+        }
+        async function onload(){
+            var info=getLoginInfo();
+            for(var i = 0;i<info.length;i++){
+                if(info[i].substring(0,4)=='from'){
+                    from = info[i].split('=')[1];
+                    console.log('from',from)
+                }
+                if(info[i].substring(0,5)=='token'){
+                    token = info[i].split('=')[1];
+                    console.log('token',token)
+                }
+                if(info[i].substring(0,3)=='uid'){
+                    uid = info[i].split('=')[1];
+                    console.log('uid',uid)
+                }
+            }
+            if(token && uid){
+                var verify = await packPOST('https\:\/\/accountsv.838483.xyz/api/tokenChk',{token:token,uid:uid,authID:'STS-SNTcommunity'})
+                if(verify.code == 200){
+                    var name = await packPOST('https\:\/\/accountsv.838483.xyz/api/uidGetName',{uid:uid})
+                    if(name.success == true){
+                        setCookie('token',token,90);
+                        setCookie('uid',uid,90);
+                        setCookie('username',name.name,90);
+                        location.href = from;
+                    }
+                }else{
+                    document.getElementById('tips').innerHTML = '登录失败';
+                }
+            }else{
+                document.getElementById('tips').innerHTML = '登录失败';
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/login.html.css">
+    </head>
+    <body onload="onload()">
+        <div id="tipsDiv">
+            <div id="centerDiv">
+                <h1 id="tips">
+                    登录中 请稍后...
+                </h1>
+            </div>
+        </div>
+    </body>
+</html>
