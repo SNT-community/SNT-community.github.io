@@ -36,6 +36,13 @@ link3.href = '//snt.838483.xyz/css/iconplus.css';
 document.head.appendChild(link3);
 console.log("iconplus.css is added"); // 添加调试信息
 
+// 创建并添加 SNT-UI.css 样式表
+var link4 = document.createElement('link');
+link4.rel = 'stylesheet';
+link4.href = '//snt.838483.xyz/css/SNT-UI.css';
+document.head.appendChild(link4);
+console.log("SNT-UI.css is added"); // 添加调试信息
+
 window.onload = function() {
     tempLoad();
 }
